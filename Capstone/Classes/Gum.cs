@@ -12,5 +12,11 @@ namespace Capstone.Classes
         {
             return "Chew Chew, Yum!";
         }
+
+        public Gum(string name, decimal price):
+            base(name, price)
+        {
+
+        }
     }
 }

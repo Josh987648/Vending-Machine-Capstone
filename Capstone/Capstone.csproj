@@ -48,7 +48,7 @@
     <Compile Include="Classes\Change.cs" />
     <Compile Include="Classes\Chips.cs" />
     <Compile Include="Classes\VendingMachine.cs" />
-    <Compile Include="Classes\VendingMachineCCI.cs" />
+    <Compile Include="Classes\VendingMachineCLI.cs" />
     <Compile Include="Classes\VendingMachineFileReader.cs" />
     <Compile Include="Classes\VendingMachineFileWriter.cs" />
     <Compile Include="Classes\VendingMachineItem.cs" />

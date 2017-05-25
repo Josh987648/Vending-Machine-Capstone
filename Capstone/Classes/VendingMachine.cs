@@ -8,6 +8,12 @@ namespace Capstone.Classes
 {
     class VendingMachine
     {
+        private Dictionary<string, List<VendingMachineItem>> inventory;
+        public VendingMachine(Dictionary<string, List<VendingMachineItem>> inventory)
+        {
+            this.inventory = inventory;
+        }
+
         public void FeedMoney(decimal dollars)
         {
 
@@ -25,7 +31,7 @@ namespace Capstone.Classes
 
         public bool IsSoldOut(string slot)
         {
-
+            return inventory[slot].Count == 0;
         }
     }
 }

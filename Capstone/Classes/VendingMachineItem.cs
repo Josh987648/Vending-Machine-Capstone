@@ -21,19 +21,12 @@ namespace Capstone.Classes
             get { return this.price; }
         }
 
-        private int quantity;
-        public int Quantity
+        public VendingMachineItem(string name, decimal price)
         {
-            get { return this.quantity; }
-        }
-
-        private string slotID;
-        public string SlotId
-        {
-            get { return this.slotID; }
+            this.name = name;
+            this.price = price;
         }
 
         public abstract string Consume();
-
     }
 }
