@@ -13,7 +13,7 @@ namespace Capstone.Classes
         public void Display()
         {
             string targetPath = Directory.GetCurrentDirectory();
-            string fileName = @"vendingmachine.csv";
+            string fileName = "vendingmachine.csv";
             string fullPath = Path.Combine(targetPath, fileName);
             VendingMachineFileReader vmfr = new VendingMachineFileReader();
             Dictionary<string, List<VendingMachineItem>> inventory = vmfr.ReadInventory(fullPath);
@@ -21,9 +21,8 @@ namespace Capstone.Classes
 
             while (true)
             {
-                Console.WriteLine("Main Menu",
-                "\n [1] Display Vending Machine Items",
-                "\n [2] Purchase");
+                Console.WriteLine("Main Menu");
+                Console.Write("[1] Display Vending Machine Items \n[2] Purchase");
                 string mainMenuResponse = Console.ReadLine();
 
                 if (mainMenuResponse == "1")
@@ -31,7 +30,7 @@ namespace Capstone.Classes
                     // display the dictionary value (vending machine items) from the list of vending machine items from user entered key
                     foreach (KeyValuePair<string, List<VendingMachineItem>> kvp in inventory)
                     {
-                        Console.WriteLine(kvp);
+                        Console.WriteLine(kvp.Value);
                     }
                 }
 
@@ -50,7 +49,7 @@ namespace Capstone.Classes
                         // accept 1, 2, 5, 10's
                         decimal[] bills = { 1, 2, 5, 10 };
                         Console.WriteLine("Please feed money one bill at a time (Enter bills as integer values)" + // remove 'integer requirement' - replace with error handler that prevets input
-                            $"\n Your current Balance is: {balance}");
+                            $"\n Your current Balance is: {null}");
                         Console.ReadLine();
                     }
 

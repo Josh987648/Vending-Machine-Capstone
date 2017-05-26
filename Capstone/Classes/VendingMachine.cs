@@ -14,24 +14,38 @@ namespace Capstone.Classes
             this.inventory = inventory;
         }
 
+        public void stockFromFile(string fullPath)
+        {
+
+        }
+
+
         public void FeedMoney(decimal dollars)
         {
-            double dollars = 0;
+            dollars = 0;
         }
 
-        public VendingMachineItem Purchase(string slot)
+        public void Purchase(string slot)
         {
-            string slot = responseChooseItem
+            slot = null; // responseChooseItem
         }
 
-        public Change CompleteTransaction()
+        public void CompleteTransaction()
         {
-
+            // if ( % 25,
         }
 
         public bool IsSoldOut(string slot)
         {
             return inventory[slot].Count == 0;
+        }
+
+
+        // Constructor?
+
+        public VendingMachine()
+        {
+
         }
     }
 }

@@ -10,6 +10,10 @@ namespace Capstone.Classes
 {
     public class VendingMachineFileReader
     {
+        public void Restock()
+        {
+
+        }
         public Dictionary<string, List<VendingMachineItem>> ReadInventory(string filePath)
         {
             Dictionary<string, List<VendingMachineItem>> inventory = new Dictionary<string, List<VendingMachineItem>>();
