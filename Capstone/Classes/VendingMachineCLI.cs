@@ -27,30 +27,32 @@ namespace Capstone.Classes
 
                 if (mainMenuResponse == "1")
                 {
+                    Console.WriteLine("Slot     Name    Cost    Quantity");
                     // display the dictionary value (vending machine items) from the list of vending machine items from user entered key
                     foreach (KeyValuePair<string, List<VendingMachineItem>> kvp in inventory)
                     {
-                        Console.WriteLine(kvp.Value);
+                        Console.WriteLine(kvp.Key + " " + kvp.Value[0].Name + " " + kvp.Value[0].Price + " " + kvp.Value.Count);
                     }
                 }
 
                 else if (mainMenuResponse == "2")
                 {
-                    Console.WriteLine("Purchase Menu",
-                    "\n [1] Feed Money",
-                    "\n [2] Select Slot ID",
+                    Console.WriteLine("Purchase Menu" +
+                    "\n [1] Feed Money" +
+                    "\n [2] Select Slot ID" +
                     "\n [3] Finish Transaction");
                     string purchaseMenuResponse = Console.ReadLine();
 
                     // 1
                     if (purchaseMenuResponse == "1")
                     {
+                        Console.WriteLine("How much money would you like to deposit?");
                         // add the feed money method
                         // accept 1, 2, 5, 10's
-                        decimal[] bills = { 1, 2, 5, 10 };
-                        Console.WriteLine("Please feed money one bill at a time (Enter bills as integer values)" + // remove 'integer requirement' - replace with error handler that prevets input
-                            $"\n Your current Balance is: {null}");
-                        Console.ReadLine();
+                        decimal[] bills = { 1, 2, 5, 10 };                          
+                        decimal depositAmount = Convert.ToDecimal(Console.ReadLine());
+                        vm.FeedMoney(depositAmount);
+                        Console.WriteLine("The current balance is now " + vm.Balance);
                     }
 
                     // 2
@@ -58,12 +60,14 @@ namespace Capstone.Classes
                     {
                         Console.WriteLine("Please enter the slot ID of the item you'd like to purchase");
                         string responseSlotID = Console.ReadLine();
-                        bool itemPresence = inventory.TryGetValue(responseSlotID, out List<VendingMachineItem> value);
-                        if (itemPresence == true)
-                        {
-                            //put in the actual add method
-                            Console.WriteLine(value + "added to cart");
-                        }
+                        VendingMachineItem purchaseItem = vm.Purchase(responseSlotID);
+                        Console.WriteLine(purchaseItem.Consume());
+                        //bool itemPresence = inventory.TryGetValue(responseSlotID, out List<VendingMachineItem> value);
+                        //if (itemPresence == true)
+                        //{
+                        //    //put in the actual add method
+                        //    Console.WriteLine(value + "added to cart");
+                        //}
                     }
 
                     // 3

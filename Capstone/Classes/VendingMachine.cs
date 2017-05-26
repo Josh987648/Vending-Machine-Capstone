@@ -8,6 +8,12 @@ namespace Capstone.Classes
 {
     class VendingMachine
     {
+        private decimal balance;
+        public decimal Balance
+        {
+            get { return this.balance; }
+        }
+
         private Dictionary<string, List<VendingMachineItem>> inventory;
         public VendingMachine(Dictionary<string, List<VendingMachineItem>> inventory)
         {
@@ -20,14 +26,19 @@ namespace Capstone.Classes
         }
 
 
-        public void FeedMoney(decimal dollars)
+        public decimal FeedMoney(decimal dollars)
         {
-            dollars = 0;
+            balance += dollars;
+            return balance;
         }
 
-        public void Purchase(string slot)
+        public VendingMachineItem Purchase(string slot)
         {
-            slot = null; // responseChooseItem
+            List<VendingMachineItem> itemsInSlot = this.inventory[slot];
+            VendingMachineItem purchasedItem = itemsInSlot[0];
+            itemsInSlot.RemoveAt(0);
+            this.balance -= purchasedItem.Price;
+            return purchasedItem;
         }
 
         public void CompleteTransaction()
