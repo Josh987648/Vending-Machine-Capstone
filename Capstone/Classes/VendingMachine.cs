@@ -16,12 +16,12 @@ namespace Capstone.Classes
 
         public void FeedMoney(decimal dollars)
         {
-
+            double dollars = 0;
         }
 
         public VendingMachineItem Purchase(string slot)
         {
-
+            string slot = responseChooseItem
         }
 
         public Change CompleteTransaction()

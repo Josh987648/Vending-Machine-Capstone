@@ -12,10 +12,6 @@ namespace Capstone.Classes
     {
         public Dictionary<string, List<VendingMachineItem>> ReadInventory(string filePath)
         {
-           // string targetPath = @"C:\Users\Sterling Hanak\Pair Projects\team7-c-module1-capstone\etc";
-            //string fileName = @"vendingmachine.csv";
-            //string fullPath = Path.Combine(targetPath, fileName);
-
             Dictionary<string, List<VendingMachineItem>> inventory = new Dictionary<string, List<VendingMachineItem>>();
             using (StreamReader sr = new StreamReader(filePath))
             {
