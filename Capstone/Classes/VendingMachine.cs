@@ -41,7 +41,7 @@ namespace Capstone.Classes
             return purchasedItem;
         }
 
-        public Change CompleteTransaction()git
+        public Change CompleteTrans
         {
             // if ( % 25,
         }
