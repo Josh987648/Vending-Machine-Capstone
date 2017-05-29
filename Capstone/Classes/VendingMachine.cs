@@ -20,7 +20,7 @@ namespace Capstone.Classes
             this.inventory = inventory;
         }
 
-        public void stockFromFile(string fullPath)
+        public void StockFromFile(string fullPath)
         {
 
         }
@@ -37,13 +37,8 @@ namespace Capstone.Classes
             List<VendingMachineItem> itemsInSlot = this.inventory[slot];
             VendingMachineItem purchasedItem = itemsInSlot[0];
             itemsInSlot.RemoveAt(0);
-            this.balance -= purchasedItem.Price;
+            this.balance = balance - (purchasedItem.Price / 2);
             return purchasedItem;
-        }
-
-        public Change CompleteTransaction()git
-        {
-            // if ( % 25,
         }
 
         public bool IsSoldOut(string slot)
@@ -51,8 +46,7 @@ namespace Capstone.Classes
             return inventory[slot].Count == 0;
         }
 
-
-        // Constructor?
+        // Constructor
 
         public VendingMachine()
         {

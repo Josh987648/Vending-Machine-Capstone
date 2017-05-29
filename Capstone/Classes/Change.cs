@@ -34,31 +34,46 @@ namespace Capstone.Classes
             get { return this.currentChange; }
         }
 
-        
-        //Method
-        public Dictionary<string, int> MakeChange(decimal startingMoney, decimal purchasePrice)
+
+        //Methods
+        public Dictionary<string, int> MakeChange(decimal startingBalance, decimal purchasePrice)
         {
-            Dictionary<string, int> totalChange = new Dictionary<string, int>();
-            currentChange = ((Convert.ToInt32(startingMoney * 100)) - (Convert.ToInt32(purchasePrice * 100)));
+            Dictionary<string, int> totalChangeInCoins = new Dictionary<string, int>();
+
+            currentChange = ((Convert.ToInt32(startingBalance * 100)) - (Convert.ToInt32(purchasePrice * 100)));
             if (currentChange >= 25)
             {
                 numQuarters = currentChange / 25;
-                totalChange.Add("Number of Quarters", numQuarters);
+                totalChangeInCoins.Add("Number of Quarters", numQuarters);
                 currentChange = currentChange - (numQuarters * 25);
             }
-            if (currentChange >= 10) 
+            if (currentChange >= 10)
             {
                 numDimes = currentChange / 10;
-                totalChange.Add("Number of Dimes", numDimes);
+                totalChangeInCoins.Add("Number of Dimes", numDimes);
                 currentChange = currentChange - (numDimes * 10);
             }
             if (currentChange >= 5)
             {
                 numNickels = currentChange / 5;
-                totalChange.Add("Number of Nickels", numNickels);
+                totalChangeInCoins.Add("Number of Nickels", numNickels);
                 currentChange = currentChange - (numNickels * 5);
             }
-            return totalChange;
+            return totalChangeInCoins;
+        }
+
+        public string ReturnChange()
+        {
+            return ($"Change returned:\n\nQuarters: {NumQuarters.ToString()}\nDimes: {NumDimes.ToString()}\nNickels: {numNickels.ToString()}");
+        }
+
+
+        //Constructor
+        public Change(decimal startingBalance, decimal purchasePrice)
+        {
+
         }
     }
 }
+
+           
