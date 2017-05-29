@@ -28,10 +28,10 @@ namespace Capstone.Classes
 
                 if (mainMenuResponse == "1")
                 {
-                    Console.WriteLine("Slot     Name    Cost    Quantity");
+                    Console.WriteLine("Slot".PadRight(21) + "Name".PadRight(21) + "Cost".PadRight(20) + "Quantity".PadRight(20) + "\n");
                     foreach (KeyValuePair<string, List<VendingMachineItem>> kvp in inventory)
                     {
-                        Console.WriteLine(kvp.Key + " " + kvp.Value[0].Name + " " + kvp.Value[0].Price + " " + kvp.Value.Count);
+                        Console.WriteLine($"{kvp.Key.PadRight(20)} {kvp.Value[0].Name.PadRight(20)} {kvp.Value[0].Price.ToString().PadRight(20)} {kvp.Value.Count.ToString().PadRight(20)}");
                     }
                 }
 
