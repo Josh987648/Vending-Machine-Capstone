@@ -20,11 +20,6 @@ namespace Capstone.Classes
             this.inventory = inventory;
         }
 
-        public void StockFromFile(string fullPath)
-        {
-
-        }
-
 
         public decimal FeedMoney(decimal dollars)
         {
@@ -37,13 +32,19 @@ namespace Capstone.Classes
             List<VendingMachineItem> itemsInSlot = this.inventory[slot];
             VendingMachineItem purchasedItem = itemsInSlot[0];
             itemsInSlot.RemoveAt(0);
-            this.balance = balance - (purchasedItem.Price / 2);
+            this.balance = balance - (purchasedItem.Price);
             return purchasedItem;
         }
 
         public bool IsSoldOut(string slot)
         {
             return inventory[slot].Count == 0;
+        }
+
+        public Dictionary<string, int> EndTransaction() // total change
+        {
+            Change change = new Change();
+            return change.MakeChange(this.balance);    
         }
 
         // Constructor

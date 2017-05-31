@@ -39,35 +39,44 @@ namespace Capstone.Classes
                 {
                     while (true)
                     {
-                        Console.WriteLine($"-----------------\nPurchase Menu\n-----------------\n\n[1] Select an item\n[2] Add to balance (Your current balance is ${vm.Balance})\n[3] Return to Main Menu\n");
+                        Console.WriteLine($"-----------------\nPurchase Menu\n-----------------\n\n[1] Add to Balance\n[2] Make Purchase (Your current balance is ${vm.Balance})\n[3] End Transaction \n[4] Return to Main Menu\n");
                         string purchaseMenuResponse = Console.ReadLine();
 
-                        if (purchaseMenuResponse == "1")
+                        if (purchaseMenuResponse == "2")
                         {
-                            Console.WriteLine("Slot     Name    Cost    Quantity");
+                            Console.WriteLine("Slot".PadRight(21) + "Name".PadRight(21) + "Cost".PadRight(20) + "Quantity".PadRight(20) + "\n");
                             foreach (KeyValuePair<string, List<VendingMachineItem>> kvp in inventory)
                             {
-                                Console.WriteLine(kvp.Key + " " + kvp.Value[0].Name + " " + kvp.Value[0].Price + " " + kvp.Value.Count);
+                                Console.WriteLine($"{kvp.Key.PadRight(20)} {kvp.Value[0].Name.PadRight(20)} {kvp.Value[0].Price.ToString().PadRight(20)} {kvp.Value.Count.ToString().PadRight(20)}");
                             }
                             Console.WriteLine("Please enter the slot ID of the item you'd like to purchase\n");
-                            string responseSlotID = Console.ReadLine();
-                            VendingMachineItem purchasedItem = vm.Purchase(responseSlotID);
-
-                            if (vm.Balance >= purchasedItem.Price && vm.IsSoldOut(responseSlotID) == false)
+                            string responseSlotID = Console.ReadLine();         
+                            if (responseSlotID ) // validate it exists (actual slot value) beins with a-d
                             {
-                                Change change = new Change(vm.Balance, purchasedItem.Price);
-                                change.MakeChange(vm.Balance, purchasedItem.Price);
-                                string coinsToReturn = change.ReturnChange();
-                                Console.WriteLine($"{purchasedItem.Name} purchased! {purchasedItem.Consume()}\n\n{coinsToReturn}\n");
-                                vm.Purchase(responseSlotID);
+                                if (vm.IsSoldOut(responseSlotID))
+                                {
+                                    if (vm.Balance >= inventory[responseSlotID][0].Price) // check to make sure balance is there
+                                    {
+                                        VendingMachineItem purchasedItem = vm.Purchase(responseSlotID);
+                                        Console.WriteLine($"{purchasedItem.Name} purchased! {purchasedItem.Consume()}\n");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Insufficient Funds or sold out\n");
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Sorry Sold Out");
+                                }
+                                
                             }
                             else
                             {
-                                Console.WriteLine("Insufficient Funds or sold out\n");
-                            }
+                                Console.WriteLine("Invalid slot ID");
+                            } 
                         }
-
-                        else if (purchaseMenuResponse == "2")
+                        else if (purchaseMenuResponse == "1")
                         {
 
                             Console.WriteLine("How much would you like to add? (Accepts 1, 2, 5, and 10 dollar bills) \n");
@@ -76,8 +85,13 @@ namespace Capstone.Classes
                             vm.FeedMoney(depositAmount);
                             Console.WriteLine($"The current balance is now {vm.Balance}\n");
                         }
-
                         else if (purchaseMenuResponse == "3")
+                        {
+                            Change change = new Change();
+                            Dictionary<string, int> returnedChange = change.MakeChange(vm.Balance);
+                            Console.WriteLine($"Quarters: {returnedChange["Quarters"]} Dime: {returnedChange["Dimes"]} Nickels: {returnedChange["Nickels"]}");
+                        }
+                        else if (purchaseMenuResponse == "4")
                         {
                             break;
                         }
