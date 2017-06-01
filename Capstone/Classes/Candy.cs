@@ -13,10 +13,11 @@ namespace Capstone.Classes
             return "Munch Munch, Yum!";
         }
 
-        public Candy(string name, decimal price):
+        public Candy(string name, decimal price) :
             base(name, price)
         {
 
         }
     }
 }
+

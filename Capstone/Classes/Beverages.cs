@@ -13,7 +13,7 @@ namespace Capstone.Classes
             return "Glug Glug, Yum!";
         }
 
-        public Beverages(string name, decimal price):
+        public Beverages(string name, decimal price) :
             base(name, price)
         {
 

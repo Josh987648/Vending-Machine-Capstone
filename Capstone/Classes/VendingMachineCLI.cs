@@ -16,6 +16,7 @@ namespace Capstone.Classes
             string fileName = "vendingmachine.csv";
             string fullPath = Path.Combine(targetPath, fileName);
             VendingMachineFileReader vmfr = new VendingMachineFileReader();
+            VendingMachineFileWriter vmfw = new VendingMachineFileWriter();
             Dictionary<string, List<VendingMachineItem>> inventory = vmfr.ReadInventory(fullPath);
             VendingMachine vm = new VendingMachine(inventory);
 
@@ -23,15 +24,16 @@ namespace Capstone.Classes
 
             while (true)
             {
-                Console.WriteLine("-----------------\nMain Menu\n-----------------\n[1] Display Vending Machine Inventory\n[2] Purchase an Item\n[3] Quit\n");
-                string mainMenuResponse = Console.ReadLine();
-                bool firstResponse = false;
 
+                bool firstResponse = false;
                 while (firstResponse == false)
                 {
-                    if (mainMenuResponse != "1" || mainMenuResponse != "2")
+                    Console.WriteLine("-----------------\nMain Menu\n-----------------\n[1] Display Vending Machine Inventory\n[2] Purchase an Item\n[3] Quit\n");
+                    string mainMenuResponse = Console.ReadLine();
+                    if (mainMenuResponse != "1" && mainMenuResponse != "2" && mainMenuResponse != "3")
                     {
                         Console.WriteLine("Error: Invalid Response.  Please enter either 1 or 2");
+
                     }
                     else if (mainMenuResponse == "1")
                     {
@@ -54,7 +56,7 @@ namespace Capstone.Classes
                                 Console.WriteLine($"-----------------\nPurchase Menu\n-----------------\n\n[1] Add to Balance\n[2] Make Purchase (Your current balance is ${vm.Balance})\n[3] End Transaction \n[4] Return to Main Menu\n");
                                 string purchaseMenuResponse = Console.ReadLine();
 
-                                if (purchaseMenuResponse != "1" || purchaseMenuResponse != "2" || purchaseMenuResponse != "3" || purchaseMenuResponse != "4")
+                                if (purchaseMenuResponse != "1" && purchaseMenuResponse != "2" && purchaseMenuResponse != "3" && purchaseMenuResponse != "4")
                                 {
                                     Console.WriteLine("Error: Invalid Response.  Please enter either 1, 2, 3, or 4.");
                                 }
@@ -66,17 +68,17 @@ namespace Capstone.Classes
                                     {
                                         Console.WriteLine($"{kvp.Key.PadRight(20)} {kvp.Value[0].Name.PadRight(20)} {kvp.Value[0].Price.ToString().PadRight(20)} {kvp.Value.Count.ToString().PadRight(20)}");
                                     }
-                                    Console.WriteLine("Please enter the slot ID of the item you'd like to purchase\n");
-                                    string responseSlotID = Console.ReadLine();
                                     bool correctSlotStart = false;
                                     bool correctSlotEnd = false;
                                     while (correctSlotStart == false && correctSlotEnd == false)
                                     {
-                                        if (!responseSlotID.StartsWith("A") || !responseSlotID.StartsWith("B") || !responseSlotID.StartsWith("C") || !responseSlotID.StartsWith("D"))
+                                        Console.WriteLine("Please enter the slot ID of the item you'd like to purchase\n");
+                                        string responseSlotID = Console.ReadLine();
+                                        if (!responseSlotID.StartsWith("A") && !responseSlotID.StartsWith("B") && !responseSlotID.StartsWith("C") && !responseSlotID.StartsWith("D"))
                                         {
                                             Console.WriteLine("Error: Invalid Response.  Please enter a valid Slot ID.");
                                         }
-                                        else if (!responseSlotID.EndsWith("1") || !responseSlotID.EndsWith("2") || !responseSlotID.EndsWith("3") || !responseSlotID.EndsWith("4"))
+                                        else if (!responseSlotID.EndsWith("1") && !responseSlotID.EndsWith("2") && !responseSlotID.EndsWith("3") && !responseSlotID.EndsWith("4"))
                                         {
                                             Console.WriteLine("Error: Invalid Response.  Please enter a valid Slot ID.");
                                         }
@@ -84,12 +86,14 @@ namespace Capstone.Classes
                                         {
                                             correctSlotStart = true;
                                             correctSlotEnd = true;
-                                            if (vm.IsSoldOut(responseSlotID))
+                                            if (vm.IsSoldOut(responseSlotID) == false)
                                             {
-                                                if (vm.Balance >= inventory[responseSlotID][0].Price) // check to make sure balance is there
+                                                if (vm.Balance >= inventory[responseSlotID][1].Price) // check to make sure balance is there
                                                 {
                                                     VendingMachineItem purchasedItem = vm.Purchase(responseSlotID);
                                                     Console.WriteLine($"{purchasedItem.Name} purchased! {purchasedItem.Consume()}\n");
+                                                    // stuff log
+                                                    vmfw.LogMessage(($"{DateTime.Now}Purchase Cost {inventory[responseSlotID][1].Price}, BALANCE: {vm.Balance}"));
                                                 }
                                                 else
                                                 {
@@ -112,7 +116,7 @@ namespace Capstone.Classes
                                     bool validDeposit = false;
                                     while (validDeposit == false)
                                     {
-                                        if (userDeposit != "1" || userDeposit != "2" || userDeposit != "5" || userDeposit != "10")
+                                        if (userDeposit != "1" && userDeposit != "2" && userDeposit != "5" && userDeposit != "10")
                                         {
                                             Console.WriteLine("Error: Unknown Amount.  Please add either a 1, 2, 5, or 10 dollar bill.");
                                         }
@@ -122,6 +126,9 @@ namespace Capstone.Classes
                                             decimal depositAmount = Convert.ToDecimal(userDeposit);
                                             vm.FeedMoney(depositAmount);
                                             Console.WriteLine($"The current balance is now {vm.Balance}\n");
+                                            // log stuff
+                                            vmfw.LogMessage(($"{DateTime.Now}Money Fed {userDeposit}, BALANCE: {vm.Balance}"));
+
                                         }
                                     }
                                 }
@@ -130,7 +137,10 @@ namespace Capstone.Classes
                                     secondResponse = true;
                                     Change change = new Change();
                                     Dictionary<string, int> returnedChange = change.MakeChange(vm.Balance);
-                                    Console.WriteLine($"Quarters: {returnedChange["Quarters"]} Dime: {returnedChange["Dimes"]} Nickels: {returnedChange["Nickels"]}");
+                                    foreach (KeyValuePair<string, int> kvp in returnedChange)
+                                    {
+                                        Console.WriteLine($"{kvp.Key} {kvp.Value}");
+                                    }
                                 }
                                 else if (purchaseMenuResponse == "4")
                                 {
@@ -140,12 +150,14 @@ namespace Capstone.Classes
                             }
                         }
                     }
-                else
-                {
-                    Environment.Exit(0);
+                    else
+                    {
+                        Environment.Exit(0);
+                    }
                 }
             }
         }
     }
 }
+
 

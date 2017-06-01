@@ -10,10 +10,6 @@ namespace Capstone.Classes
 {
     public class VendingMachineFileReader
     {
-        public void Restock()
-        {
-
-        }
         public Dictionary<string, List<VendingMachineItem>> ReadInventory(string filePath)
         {
             Dictionary<string, List<VendingMachineItem>> inventory = new Dictionary<string, List<VendingMachineItem>>();
@@ -26,35 +22,35 @@ namespace Capstone.Classes
                     List<VendingMachineItem> items = new List<VendingMachineItem>();
                     string itemName = values[1];
                     decimal itemCost = decimal.Parse(values[2]);
-                    
-                        if (values[0].StartsWith("A"))
+
+                    if (values[0].StartsWith("A"))
+                    {
+                        for (int i = 0; i < 5; i++)
                         {
-                            for (int i = 0; i < 5; i++)
-                            {
-                                items.Add(new Chips(itemName, itemCost));
-                            }
+                            items.Add(new Chips(itemName, itemCost));
                         }
-                        else if (values[0].StartsWith("B"))
+                    }
+                    else if (values[0].StartsWith("B"))
+                    {
+                        for (int i = 0; i < 5; i++)
                         {
-                            for (int i = 0; i < 5; i++)
-                            {
-                                items.Add(new Candy(itemName, itemCost));
-                            }
+                            items.Add(new Candy(itemName, itemCost));
                         }
-                        else if (values[0].StartsWith("C"))
+                    }
+                    else if (values[0].StartsWith("C"))
+                    {
+                        for (int i = 0; i < 5; i++)
                         {
-                            for (int i = 0; i < 5; i++)
-                            {
-                                items.Add(new Beverages(itemName, itemCost));
-                            }
+                            items.Add(new Beverages(itemName, itemCost));
                         }
-                        else if (values[0].StartsWith("D"))
+                    }
+                    else if (values[0].StartsWith("D"))
+                    {
+                        for (int i = 0; i < 5; i++)
                         {
-                            for (int i = 0; i < 5; i++)
-                            {
-                                items.Add(new Gum(itemName, itemCost));
-                            }
+                            items.Add(new Gum(itemName, itemCost));
                         }
+                    }
                     inventory.Add(values[0], items);
                 }
                 return inventory;

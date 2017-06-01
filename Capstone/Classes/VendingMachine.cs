@@ -36,14 +36,6 @@ namespace Capstone.Classes
             return purchasedItem;
         }
 
-<<<<<<< HEAD
-        public Change CompleteTrans
-        {
-            // if ( % 25,
-        }
-
-=======
->>>>>>> e1d76fa00528dfe6d8686dc0f9d68a8c4ea24902
         public bool IsSoldOut(string slot)
         {
             return inventory[slot].Count == 0;
@@ -52,7 +44,7 @@ namespace Capstone.Classes
         public Dictionary<string, int> EndTransaction() // total change
         {
             Change change = new Change();
-            return change.MakeChange(this.balance);    
+            return change.MakeChange(this.balance);
         }
 
         // Constructor

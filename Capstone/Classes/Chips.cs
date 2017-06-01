@@ -13,10 +13,10 @@ namespace Capstone.Classes
             return "Crunch Cruch, Yum!";
         }
 
-        public Chips(string name, decimal price):
+        public Chips(string name, decimal price) :
             base(name, price)
         {
-            
+
         }
     }
 }
