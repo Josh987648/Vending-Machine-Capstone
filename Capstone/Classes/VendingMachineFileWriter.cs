@@ -8,5 +8,8 @@ namespace Capstone.Classes
 {
     class VendingMachineFileWriter
     {
+        // if balance >= purchaseItem cost
+            //Remove one instance of purchaseItem from the items list
+            //Find new balance
     }
 }

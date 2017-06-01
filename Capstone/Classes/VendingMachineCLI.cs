@@ -19,72 +19,133 @@ namespace Capstone.Classes
             Dictionary<string, List<VendingMachineItem>> inventory = vmfr.ReadInventory(fullPath);
             VendingMachine vm = new VendingMachine(inventory);
 
+            Console.WriteLine("*****************\nVendo-Matic 500\n*****************");
+
             while (true)
             {
-                Console.WriteLine("Main Menu");
-                Console.Write("[1] Display Vending Machine Items \n[2] Purchase");
+                Console.WriteLine("-----------------\nMain Menu\n-----------------\n[1] Display Vending Machine Inventory\n[2] Purchase an Item\n[3] Quit\n");
                 string mainMenuResponse = Console.ReadLine();
+                bool firstResponse = false;
 
-                if (mainMenuResponse == "1")
+                while (firstResponse == false)
                 {
-                    Console.WriteLine("Slot     Name    Cost    Quantity");
-                    // display the dictionary value (vending machine items) from the list of vending machine items from user entered key
-                    foreach (KeyValuePair<string, List<VendingMachineItem>> kvp in inventory)
+                    if (mainMenuResponse != "1" || mainMenuResponse != "2")
                     {
-                        Console.WriteLine(kvp.Key + " " + kvp.Value[0].Name + " " + kvp.Value[0].Price + " " + kvp.Value.Count);
+                        Console.WriteLine("Error: Invalid Response.  Please enter either 1 or 2");
                     }
-                }
+                    else if (mainMenuResponse == "1")
+                    {
+                        firstResponse = true;
+                        Console.WriteLine("Slot".PadRight(21) + "Name".PadRight(21) + "Cost".PadRight(20) + "Quantity".PadRight(20) + "\n");
+                        foreach (KeyValuePair<string, List<VendingMachineItem>> kvp in inventory)
+                        {
+                            Console.WriteLine($"{kvp.Key.PadRight(20)} {kvp.Value[0].Name.PadRight(20)} {kvp.Value[0].Price.ToString().PadRight(20)} {kvp.Value.Count.ToString().PadRight(20)}");
+                        }
+                    }
+                    else if (mainMenuResponse == "2")
+                    {
+                        firstResponse = true;
+                        bool secondResponse = false;
 
-                else if (mainMenuResponse == "2")
+                        while (secondResponse == false)
+                        {
+                            while (true)
+                            {
+                                Console.WriteLine($"-----------------\nPurchase Menu\n-----------------\n\n[1] Add to Balance\n[2] Make Purchase (Your current balance is ${vm.Balance})\n[3] End Transaction \n[4] Return to Main Menu\n");
+                                string purchaseMenuResponse = Console.ReadLine();
+
+                                if (purchaseMenuResponse != "1" || purchaseMenuResponse != "2" || purchaseMenuResponse != "3" || purchaseMenuResponse != "4")
+                                {
+                                    Console.WriteLine("Error: Invalid Response.  Please enter either 1, 2, 3, or 4.");
+                                }
+                                else if (purchaseMenuResponse == "2")
+                                {
+                                    secondResponse = true;
+                                    Console.WriteLine("Slot".PadRight(21) + "Name".PadRight(21) + "Cost".PadRight(20) + "Quantity".PadRight(20) + "\n");
+                                    foreach (KeyValuePair<string, List<VendingMachineItem>> kvp in inventory)
+                                    {
+                                        Console.WriteLine($"{kvp.Key.PadRight(20)} {kvp.Value[0].Name.PadRight(20)} {kvp.Value[0].Price.ToString().PadRight(20)} {kvp.Value.Count.ToString().PadRight(20)}");
+                                    }
+                                    Console.WriteLine("Please enter the slot ID of the item you'd like to purchase\n");
+                                    string responseSlotID = Console.ReadLine();
+                                    bool correctSlotStart = false;
+                                    bool correctSlotEnd = false;
+                                    while (correctSlotStart == false && correctSlotEnd == false)
+                                    {
+                                        if (!responseSlotID.StartsWith("A") || !responseSlotID.StartsWith("B") || !responseSlotID.StartsWith("C") || !responseSlotID.StartsWith("D"))
+                                        {
+                                            Console.WriteLine("Error: Invalid Response.  Please enter a valid Slot ID.");
+                                        }
+                                        else if (!responseSlotID.EndsWith("1") || !responseSlotID.EndsWith("2") || !responseSlotID.EndsWith("3") || !responseSlotID.EndsWith("4"))
+                                        {
+                                            Console.WriteLine("Error: Invalid Response.  Please enter a valid Slot ID.");
+                                        }
+                                        else
+                                        {
+                                            correctSlotStart = true;
+                                            correctSlotEnd = true;
+                                            if (vm.IsSoldOut(responseSlotID))
+                                            {
+                                                if (vm.Balance >= inventory[responseSlotID][0].Price) // check to make sure balance is there
+                                                {
+                                                    VendingMachineItem purchasedItem = vm.Purchase(responseSlotID);
+                                                    Console.WriteLine($"{purchasedItem.Name} purchased! {purchasedItem.Consume()}\n");
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine("Insufficient Funds or sold out\n");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("Sorry Sold Out");
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (purchaseMenuResponse == "1")
+                                {
+                                    secondResponse = true;
+                                    Console.WriteLine("How much would you like to add? (Accepts 1, 2, 5, and 10 dollar bills) \n");
+                                    string userDeposit = Console.ReadLine();
+                                    decimal[] bills = { 1, 2, 5, 10 };
+                                    bool validDeposit = false;
+                                    while (validDeposit == false)
+                                    {
+                                        if (userDeposit != "1" || userDeposit != "2" || userDeposit != "5" || userDeposit != "10")
+                                        {
+                                            Console.WriteLine("Error: Unknown Amount.  Please add either a 1, 2, 5, or 10 dollar bill.");
+                                        }
+                                        else
+                                        {
+                                            validDeposit = true;
+                                            decimal depositAmount = Convert.ToDecimal(userDeposit);
+                                            vm.FeedMoney(depositAmount);
+                                            Console.WriteLine($"The current balance is now {vm.Balance}\n");
+                                        }
+                                    }
+                                }
+                                else if (purchaseMenuResponse == "3")
+                                {
+                                    secondResponse = true;
+                                    Change change = new Change();
+                                    Dictionary<string, int> returnedChange = change.MakeChange(vm.Balance);
+                                    Console.WriteLine($"Quarters: {returnedChange["Quarters"]} Dime: {returnedChange["Dimes"]} Nickels: {returnedChange["Nickels"]}");
+                                }
+                                else if (purchaseMenuResponse == "4")
+                                {
+                                    secondResponse = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                else
                 {
-                    Console.WriteLine("Purchase Menu" +
-                    "\n [1] Feed Money" +
-                    "\n [2] Select Slot ID" +
-                    "\n [3] Finish Transaction");
-                    string purchaseMenuResponse = Console.ReadLine();
-
-                    // 1
-                    if (purchaseMenuResponse == "1")
-                    {
-                        Console.WriteLine("How much money would you like to deposit?");
-                        // add the feed money method
-                        // accept 1, 2, 5, 10's
-                        decimal[] bills = { 1, 2, 5, 10 };                          
-                        decimal depositAmount = Convert.ToDecimal(Console.ReadLine());
-                        vm.FeedMoney(depositAmount);
-                        Console.WriteLine("The current balance is now " + vm.Balance);
-                    }
-
-                    // 2
-                    else if (purchaseMenuResponse == "2")
-                    {
-                        Console.WriteLine("Please enter the slot ID of the item you'd like to purchase");
-                        string responseSlotID = Console.ReadLine();
-                        VendingMachineItem purchaseItem = vm.Purchase(responseSlotID);
-                        Console.WriteLine(purchaseItem.Consume());
-                        //bool itemPresence = inventory.TryGetValue(responseSlotID, out List<VendingMachineItem> value);
-                        //if (itemPresence == true)
-                        //{
-                        //    //put in the actual add method
-                        //    Console.WriteLine(value + "added to cart");
-                        //}
-                    }
-
-                    // 3
-                    else if (purchaseMenuResponse == "3")
-                    {
-                        // change method
-                        // 
-                        Console.WriteLine("Complete Transaction");
-                    }
-
-                    else
-                    {
-                        // break from while an return to main
-                        Console.WriteLine("Specified Slot ID not found");
-                    }
+                    Environment.Exit(0);
                 }
             }
-        }       
+        }
     }
 }
+
