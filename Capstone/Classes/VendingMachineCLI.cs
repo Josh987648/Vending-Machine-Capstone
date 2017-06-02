@@ -73,7 +73,7 @@ namespace Capstone.Classes
                                     while (correctSlotStart == false && correctSlotEnd == false)
                                     {
                                         Console.WriteLine("Please enter the slot ID of the item you'd like to purchase\n");
-                                        string responseSlotID = Console.ReadLine();
+                                        string responseSlotID = Console.ReadLine().ToUpper();
                                         if (!responseSlotID.StartsWith("A") && !responseSlotID.StartsWith("B") && !responseSlotID.StartsWith("C") && !responseSlotID.StartsWith("D"))
                                         {
                                             Console.WriteLine("Error: Invalid Response.  Please enter a valid Slot ID.");
@@ -110,12 +110,12 @@ namespace Capstone.Classes
                                 else if (purchaseMenuResponse == "1")
                                 {
                                     secondResponse = true;
-                                    Console.WriteLine("How much would you like to add? (Accepts 1, 2, 5, and 10 dollar bills) \n");
-                                    string userDeposit = Console.ReadLine();
-                                    decimal[] bills = { 1, 2, 5, 10 };
                                     bool validDeposit = false;
                                     while (validDeposit == false)
                                     {
+                                        Console.WriteLine("How much would you like to add? (Accepts 1, 2, 5, and 10 dollar bills) \n");
+                                        string userDeposit = Console.ReadLine();
+                                        decimal[] bills = { 1, 2, 5, 10 };
                                         if (userDeposit != "1" && userDeposit != "2" && userDeposit != "5" && userDeposit != "10")
                                         {
                                             Console.WriteLine("Error: Unknown Amount.  Please add either a 1, 2, 5, or 10 dollar bill.");
@@ -128,7 +128,6 @@ namespace Capstone.Classes
                                             Console.WriteLine($"The current balance is now {vm.Balance}\n");
                                             // log stuff
                                             vmfw.LogMessage(($"{DateTime.Now}Money Fed {userDeposit}, BALANCE: {vm.Balance}"));
-
                                         }
                                     }
                                 }
@@ -136,7 +135,7 @@ namespace Capstone.Classes
                                 {
                                     secondResponse = true;
                                     Change change = new Change();
-                                    Dictionary<string, int> returnedChange = change.MakeChange(vm.Balance);
+                                    Dictionary<string, int> returnedChange = change.MakeChange(vm.Balance);                      
                                     foreach (KeyValuePair<string, int> kvp in returnedChange)
                                     {
                                         Console.WriteLine($"{kvp.Key} {kvp.Value}");

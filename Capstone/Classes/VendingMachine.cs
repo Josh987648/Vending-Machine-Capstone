@@ -47,6 +47,7 @@ namespace Capstone.Classes
             return change.MakeChange(this.balance);
         }
 
+
         // Constructor
 
         public VendingMachine()
