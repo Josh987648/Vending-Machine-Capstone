@@ -29,11 +29,29 @@ namespace Capstone.Classes
 
         public VendingMachineItem Purchase(string slot)
         {
+            if(!IsValidSlot(slot) || IsSoldOut(slot) || !DoesHaveEnoughMoney(slot))
+            {
+                return null;
+            }
+
             List<VendingMachineItem> itemsInSlot = this.inventory[slot];
             VendingMachineItem purchasedItem = itemsInSlot[0];
             itemsInSlot.RemoveAt(0);
             this.balance = balance - (purchasedItem.Price);
+
             return purchasedItem;
+        }
+
+        public bool DoesHaveEnoughMoney(string slot)
+        {
+            if(IsValidSlot(slot) && !IsSoldOut(slot))
+            {
+                return balance >= inventory[slot][0].Price;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool IsSoldOut(string slot)
@@ -41,10 +59,17 @@ namespace Capstone.Classes
             return inventory[slot].Count == 0;
         }
 
-        public Dictionary<string, int> EndTransaction() // total change
+        public bool IsValidSlot(string slot)
         {
-            Change change = new Change();
-            return change.MakeChange(this.balance);
+            return inventory.ContainsKey(slot.ToUpper());
+        }
+
+        public Change EndTransaction() // total change
+        {
+            Change change = new Change(this.balance);
+            this.balance = 0;
+
+            return change;
         }
 
 

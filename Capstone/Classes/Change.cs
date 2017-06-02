@@ -34,45 +34,29 @@ namespace Capstone.Classes
             get { return this.currentChange; }
         }
 
-
-        //Methods
-        public Dictionary<string, int> MakeChange(decimal startingBalance)
+        public Change(decimal startingBalance)
         {
-            Dictionary<string, int> totalChangeInCoins = new Dictionary<string, int>();
-
             currentChange = ((Convert.ToInt32(startingBalance * 100)));
             if (currentChange >= 25)
             {
-                numQuarters = currentChange / 25;
-                totalChangeInCoins.Add("Quarters", numQuarters);
+                numQuarters = currentChange / 25;                
                 currentChange = currentChange - (numQuarters * 25);
             }
             if (currentChange >= 10)
             {
-                numDimes = currentChange / 10;
-                totalChangeInCoins.Add("Dimes", numDimes);
+                numDimes = currentChange / 10;                
                 currentChange = currentChange - (numDimes * 10);
             }
             if (currentChange >= 5)
             {
-                numNickels = currentChange / 5;
-                totalChangeInCoins.Add("Nickels", numNickels);
+                numNickels = currentChange / 5;                
                 currentChange = currentChange - (numNickels * 5);
             }
-            return totalChangeInCoins;
-        }
-
-        public string ReturnChange()
-        {
-            return ($"Change returned:\n\nQuarters: {NumQuarters.ToString()}\nDimes: {NumDimes.ToString()}\nNickels: {numNickels.ToString()}");
         }
 
 
-        //Constructor
-        public Change()
-        {
-
-        }
+     
+        
     }
 }
 
